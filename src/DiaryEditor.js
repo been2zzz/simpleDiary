@@ -3,16 +3,19 @@ const DiaryEditor = () => {
   const [state, setState] = useState({
     author: "",
     content: "",
+    emotion: 1,
   });
-
-  //   const [author, setAuthor] = useState("");
-  //   const [content, setContent] = useState("");
 
   const handleChangeState = (e) => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
     });
+  };
+
+  const hadleSubmit = () => {
+    console.log(state);
+    alert("submit complete");
   };
   return (
     <div className="DiaryEditor">
@@ -28,13 +31,24 @@ const DiaryEditor = () => {
         <textarea
           name="content"
           value={state.content}
-          onChange={(e) => {
-            setState({
-              ...state, // state 먼저 펼치기! 반대로 할 경우 state가 그대로 겹쳐지기 때문에 변하지 않음
-              content: e.target.value,
-            });
-          }}
+          onChange={handleChangeState}
         />
+      </div>
+      <div>
+        <select
+          name="emotion"
+          value={state.emotion}
+          onChange={handleChangeState}
+        >
+          <option value="{1}">1</option>
+          <option value="{2}">2</option>
+          <option value="{3}">3</option>
+          <option value="{4}">4</option>
+          <option value="{5}">5</option>
+        </select>
+      </div>
+      <div>
+        <button onClick={hadleSubmit}>일기 저장하기</button>
       </div>
     </div>
   );
