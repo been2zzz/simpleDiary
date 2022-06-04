@@ -25,7 +25,7 @@ const DiaryEditor = () => {
       return;
     }
 
-    alert("save success!");
+    alert("submit success!");
   };
   return (
     <div className="DiaryEditor">
