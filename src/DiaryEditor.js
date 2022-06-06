@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-const DiaryEditor = () => {
+const DiaryEditor = ({ onCreate }) => {
   const authorInput = useRef(); // DOM 조작
   const contentInput = useRef();
   const [state, setState] = useState({
@@ -25,7 +25,13 @@ const DiaryEditor = () => {
       return;
     }
 
+    onCreate(state.author, state.content, state.emotion);
     alert("submit success!");
+    setState({
+      author: "",
+      content: "",
+      emotion: 1,
+    });
   };
   return (
     <div className="DiaryEditor">
@@ -52,11 +58,11 @@ const DiaryEditor = () => {
           value={state.emotion}
           onChange={handleChangeState}
         >
-          <option value="{1}">1</option>
-          <option value="{2}">2</option>
-          <option value="{3}">3</option>
-          <option value="{4}">4</option>
-          <option value="{5}">5</option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
         </select>
       </div>
       <div>
