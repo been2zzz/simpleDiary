@@ -1,4 +1,4 @@
-const DiaryItem = ({ author, content, created_date, emotion, id }) => {
+const DiaryItem = ({ author, content, created_date, emotion }) => {
   return (
     <div className="DiaryItem">
       <div className="info">
