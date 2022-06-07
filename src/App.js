@@ -1,7 +1,7 @@
-import { useRef, useState } from "react";
-import "./App.css";
-import DiaryEditor from "./DiaryEditor";
-import DiaryList from "./DiaryList";
+import { useRef, useState } from 'react';
+import './App.css';
+import DiaryEditor from './DiaryEditor';
+import DiaryList from './DiaryList';
 
 function App() {
   const [data, setData] = useState([]);
@@ -20,16 +20,23 @@ function App() {
     setData([newItem, ...data]); // new item 처음으로 정렬
   };
 
-  const onDelete = (targetId) => {
+  const onEdit = (targetId, newContent) => {
+    setData(
+      data.map((it) =>
+        it.id === targetId ? { ...it, content: newContent } : it
+      )
+    );
+  };
+  const onRemove = (targetId) => {
     const newDiaryList = data.filter((it) => it.id !== targetId);
     setData(newDiaryList);
   };
 
   return (
-    <div className="App">
+    <div className='App'>
       <h2>Diary</h2>
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList onDelete={onDelete} diaryList={data} />
+      <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
     </div>
   );
 }
