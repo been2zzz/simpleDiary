@@ -49,17 +49,17 @@ function App() {
     // 항상 최신의 state 참조를 도와주는 함수형 업데이트 방법
   }, []);
 
-  const onEdit = (targetId, newContent) => {
-    setData(
+  const onEdit = useCallback((targetId, newContent) => {
+    setData((data) =>
       data.map((it) =>
         it.id === targetId ? { ...it, content: newContent } : it
       )
     );
-  };
-  const onRemove = (targetId) => {
-    const newDiaryList = data.filter((it) => it.id !== targetId);
-    setData(newDiaryList);
-  };
+  }, []);
+
+  const onRemove = useCallback((targetId) => {
+    setData((data) => data.filter((it) => it.id !== targetId)); // 인자 부분 data, return 부분
+  }, []);
 
   const getDiaryAnalysis = useMemo(() => {
     // useMemo로 부터 값을 return 받기 때문에 더이상 함수가 아님
