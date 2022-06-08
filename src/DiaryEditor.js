@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 const DiaryEditor = ({ onCreate }) => {
   const authorInput = useRef(); // DOM 조작
   const contentInput = useRef();
@@ -6,6 +6,10 @@ const DiaryEditor = ({ onCreate }) => {
     author: '',
     content: '',
     emotion: 1,
+  });
+
+  useEffect(() => {
+    console.log('DiaryEditor render');
   });
 
   const handleChangeState = (e) => {
@@ -72,4 +76,4 @@ const DiaryEditor = ({ onCreate }) => {
   );
 };
 
-export default DiaryEditor;
+export default React.memo(DiaryEditor); // 최적화를 위해 React.memo

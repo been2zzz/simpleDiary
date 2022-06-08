@@ -1,4 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
@@ -28,7 +34,8 @@ function App() {
   useEffect(() => {
     getData();
   }, []);
-  const onCreate = (author, content, emotion) => {
+
+  const onCreate = useCallback((author, content, emotion) => {
     const created_date = new Date().getTime();
     const newItem = {
       author,
@@ -38,8 +45,9 @@ function App() {
       id: dataId.current,
     };
     dataId.current += 1;
-    setData([newItem, ...data]); // new item 처음으로 정렬
-  };
+    setData((data) => [newItem, ...data]); // new item 처음으로 정렬
+    // 항상 최신의 state 참조를 도와주는 함수형 업데이트 방법
+  }, []);
 
   const onEdit = (targetId, newContent) => {
     setData(
@@ -55,7 +63,6 @@ function App() {
 
   const getDiaryAnalysis = useMemo(() => {
     // useMemo로 부터 값을 return 받기 때문에 더이상 함수가 아님
-    console.log('일기 분석 시작');
     const goodCount = data.filter((it) => it.emotion >= 3).length;
     const badCount = data.length - goodCount;
     const goodRatio = (goodCount / data.length) * 100;
