@@ -8,10 +8,10 @@ import React, {
 import './App.css';
 import DiaryEditor from './DiaryEditor';
 import DiaryList from './DiaryList';
+
 // 복잡한 상태 변화 로직를 AppComponent와 분리하기 위해 App 밖에 선언
 const reducer = (state, action) => {
-  console.log(action);
-  // param(상태 변화가 일어나기 직전 state, action 객체)
+  // (상태 변화가 일어나기 직전 state, action 객체)
   switch (action.type) {
     case 'INIT': {
       return action.data; // return한 값이 새로운 state가 됨
@@ -38,9 +38,11 @@ const reducer = (state, action) => {
   }
 };
 
+export const DiaryStateContext = React.createContext();
+export const DiaryDispatchContext = React.createContext();
+
 const App = () => {
   const [data, dispatch] = useReducer(reducer, []);
-
   const dataId = useRef(0);
 
   const getData = async () => {
@@ -82,6 +84,15 @@ const App = () => {
     dispatch({ type: 'REMOVE', targetId });
   }, []);
 
+  // Context.Provider value에 넘겨줄 변수 store
+  const store = {
+    data,
+  };
+  // App 컴포넌트가 재생성 될 때 함수도 재생성 되지 않게 하기 위해 useMemo 사용
+  const memoizedDispatches = useMemo(() => {
+    return { onCreate, onEdit, onRemove };
+  }, []);
+
   const getDiaryAnalysis = useMemo(() => {
     // useMemo로 부터 값을 return 받기 때문에 더이상 함수가 아님
     const goodCount = data.filter((it) => it.emotion >= 3).length;
@@ -93,15 +104,15 @@ const App = () => {
   const { goodCount, badCount, goodRatio } = getDiaryAnalysis;
 
   return (
-    <div className='App'>
-      <h2>Diary</h2>
-      <DiaryEditor onCreate={onCreate} />
-      <div>전체 일기 : {data.length}</div>
-      <div>기분 좋은 일기 개수 : {goodCount}</div>
-      <div>기분 나쁜 일기 개수 : {badCount}</div>
-      <div>기분 좋은 일기 비율 : {goodRatio}</div>
-      <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
-    </div>
+    <DiaryStateContext.Provider value={store}>
+      <DiaryDispatchContext.Provider value={memoizedDispatches}>
+        <div className='App'>
+          <h2>Diary</h2>
+          <DiaryEditor />
+          <DiaryList />
+        </div>
+      </DiaryDispatchContext.Provider>
+    </DiaryStateContext.Provider>
   );
 };
 
